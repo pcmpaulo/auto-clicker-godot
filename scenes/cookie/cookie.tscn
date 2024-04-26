@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://m16fsm14pcgn"]
+
+[ext_resource type="Script" path="res://scenes/cookie/cookie.gd" id="1_3bpgr"]
+[ext_resource type="Texture2D" uid="uid://dppk784gmxgp0" path="res://assets/Cookie.png" id="1_o03lb"]
+[ext_resource type="Texture2D" uid="uid://ddcdivemfsjf2" path="res://assets/brokenCookie.png" id="3_ij001"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u3nnr"]
+radius = 120.0
+
+[sub_resource type="Animation" id="Animation_pjbl4"]
+resource_name = "click"
+length = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0.5, 0.5), Vector2(0.45, 0.45)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_t0lq5"]
+_data = {
+"click": SubResource("Animation_pjbl4")
+}
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4p1cb"]
+particles_animation = true
+particles_anim_h_frames = 9
+particles_anim_v_frames = 1
+particles_anim_loop = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_iig7c"]
+particle_flag_disable_z = true
+spread = 180.0
+initial_velocity_min = 280.0
+initial_velocity_max = 280.0
+gravity = Vector3(0, 98, 0)
+scale_min = 0.3
+scale_max = 0.3
+anim_offset_max = 1.0
+
+[node name="Cookie" type="Area2D"]
+script = ExtResource("1_3bpgr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_o03lb")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_u3nnr")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_t0lq5")
+}
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_4p1cb")
+emitting = false
+amount = 16
+process_material = SubResource("ParticleProcessMaterial_iig7c")
+texture = ExtResource("3_ij001")
+lifetime = 0.4
+one_shot = true
+explosiveness = 1.0
+randomness = 0.47
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
